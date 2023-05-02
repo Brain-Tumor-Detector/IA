@@ -21,7 +21,7 @@ if __name__ == '__main__':
         horizontal_flip = config['DATA_AUGMENTATION']['HORIZONTAL_FLIP'],
         vertical_flip = config['DATA_AUGMENTATION']['VERTICAL_FLIP'],
         validation_split = float(config['DATA_AUGMENTATION']['VALIDATION_SPLIT']),
-        rotation_range = config['DATA_AUGMENTATION']['ROTATION_RANGE']
+        rotation_range = int(config['DATA_AUGMENTATION']['ROTATION_RANGE'])
     )
 
     # Generamos el dataset de entrenamiento y validación
@@ -29,7 +29,7 @@ if __name__ == '__main__':
         dataset = dataset,
         path = config['PATHS']['IN_TRAIN_DATASET'],
         target_size = (config['DATASET_CONFIG']['PHOTO_HEIGHT'], config['DATASET_CONFIG']['PHOTO_WIDTH']), 
-        batch_size = config['DATASET_CONFIG']['BATCH_SIZE'],
+        batch_size = int(config['DATASET_CONFIG']['BATCH_SIZE']),
         color_mode = config['DATASET_CONFIG']['COLOR_MODE'],
         shuffle = config['DATASET_CONFIG']['SHUFFLE'],
         class_mode = config['DATASET_CONFIG']['CLASS_MODE'],
@@ -39,11 +39,19 @@ if __name__ == '__main__':
     model = generate_model(
         heigth = int(config['DATASET_CONFIG']['PHOTO_HEIGHT']),
         width = int(config['DATASET_CONFIG']['PHOTO_WIDTH']),
-        optimizer = config['COMPILE_CONFIG']['OPTIMIZER'],
-        loss = config['COMPILE_CONFIG']['LOSS']
+        optimizer = config['MODEL_CONFIG']['OPTIMIZER'],
+        loss = config['MODEL_CONFIG']['LOSS']
     )
     print(model.summary())
 
     # Entrenamos el modelo
+    result = train_model(
+        model = model,
+        path = config['PATHS']['MODEL'],
+        name = config['MODEL_CONFIG']['NAME'],
+        train_data = train,
+        epochs = int(config['MODEL_CONFIG']['EPOCHS']),
+        validation_data = test
+    )
 
-    # Guardamos el modelo y sus estádisticas
+    # Guardamos las estadísticas del modelo

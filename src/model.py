@@ -37,10 +37,11 @@ def generate_model(heigth, width, optimizer, loss):
 def train_model(model, path, name, train_data, epochs, validation_data):
     # Establecemos los checkpoints
     early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-    checkpoint = ModelCheckpoint(path + "Model.h5", monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
+    checkpoint = ModelCheckpoint('./model.h5', monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
     
     return model.fit(
         train_data, 
         epochs=epochs, 
         callbacks=[early_stopping, checkpoint], 
-        validation_data=validation_data)
+        validation_data=validation_data
+        )
